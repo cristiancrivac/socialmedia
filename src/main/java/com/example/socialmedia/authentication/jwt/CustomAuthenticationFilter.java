@@ -2,6 +2,8 @@ package com.example.socialmedia.authentication.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.socialmedia.authentication.LoginRequest;
+import com.example.socialmedia.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -36,20 +37,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-//        String username = request.getParameter("email");
-//        String password = request.getParameter("password");
+        LoginRequest loginRequest;
 
-        User credentials = null;
         try {
-            credentials = new ObjectMapper().readValue(request.getInputStream(), User.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String body = request.getReader().lines().collect(Collectors.joining());
+            loginRequest = objectMapper.readValue(body, LoginRequest.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-//        logger.info("Username is: {}", username);
-//        logger.info("Password is: {}", password);
-
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
 
         return authenticationManager.authenticate(authenticationToken);
     }

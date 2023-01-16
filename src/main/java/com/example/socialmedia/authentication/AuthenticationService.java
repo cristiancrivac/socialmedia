@@ -35,13 +35,6 @@ public class AuthenticationService {
         this.emailValidator = emailValidator;
     }
 
-    public String login(LoginRequest loginRequest) {
-        //TODO Custom login
-
-
-        return "";
-    }
-
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
 

@@ -5,7 +5,6 @@ import com.example.socialmedia.authentication.jwt.CustomAuthorizationFilter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
 
@@ -14,10 +13,10 @@ public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurit
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager);
 
-        customAuthenticationFilter.setFilterProcessesUrl("api/auth/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
 
         http.addFilter(customAuthenticationFilter);
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilter(), CustomAuthenticationFilter.class);
     }
 
     public static MyCustomDsl customDsl() {

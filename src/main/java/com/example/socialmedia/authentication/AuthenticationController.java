@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/api/v1/auth")
+@RequestMapping(path = "/api/auth")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
@@ -18,11 +18,6 @@ public class AuthenticationController {
     @PostMapping(path = "/register")
     public ResponseEntity<String> register(@RequestBody RegistrationRequest request) {
         return ResponseEntity.ok().body(authenticationService.register(request));
-    }
-
-    @PostMapping(path = "/login")
-    public ResponseEntity<String> register(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok().body(authenticationService.login(request));
     }
 
     @GetMapping(path = "/confirm")
